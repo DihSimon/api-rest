@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -24,7 +27,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * @ControllerAdvice
  * Conttroler para observar toda a aplicação, afim de encontrar mensagens de erros
  * @author Diego
- *
  */
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
@@ -57,6 +59,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		return super.handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({EmptyResultDataAccessException.class})
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseEntity<Object> emptyResultDataAccessException(EmptyResultDataAccessException ex,
+			 WebRequest request) {
+		String mensagemUsuario = mensagemSource.getMessage("recurso.nao.encontrado", null, LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ex.toString();
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request); 
+	}
+	
 	/**
 	 * Metodo para capturar os erros na lista
 	 * @return
@@ -71,9 +83,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		return erros;
 	}
 
-	
+	/**
+	 * Classe que contem os atributos de erros
+	 * @author resource189
+	 *
+	 */
 	public static class Erro {
-		
 		
 		public Erro(String mensagemUsuario, String mensagemDesenvolvedor) {
 			super();
