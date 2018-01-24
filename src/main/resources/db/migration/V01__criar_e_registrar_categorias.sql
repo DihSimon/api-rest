@@ -1,6 +1,6 @@
 CREATE TABLE `categoria` (
 	`codigo` BIGINT(20) NOT NULL AUTO_INCREMENT,
-	`nome` VARCHAR(250) NOT NULL,
+	`nome` VARCHAR(50) NOT NULL,
 	PRIMARY KEY (`codigo`)
 )
 COLLATE='utf8_general_ci'
