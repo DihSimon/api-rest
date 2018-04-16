@@ -2,7 +2,6 @@ package com.api.rest.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,21 +20,22 @@ public class Lancamento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
-	private String descricao;
 	
+	private String descricao;
+
 	@Column(name = "data_vencimento")
 	private LocalDate dataVencimento;
-	
+
 	@Column(name = "data_pagamento")
-	private LocalDate datapagamento;
-	
+	private LocalDate dataPagamento;
+
 	private BigDecimal valor;
-	
+
 	private String observacao;
-	
+
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipo;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_categoria")
 	private Categoria categoria;
@@ -68,12 +68,12 @@ public class Lancamento {
 		this.dataVencimento = dataVencimento;
 	}
 
-	public LocalDate getDatapagamento() {
-		return datapagamento;
+	public LocalDate getDataPagamento() {
+		return dataPagamento;
 	}
 
-	public void setDatapagamento(LocalDate datapagamento) {
-		this.datapagamento = datapagamento;
+	public void setDataPagamento(LocalDate dataPagamento) {
+		this.dataPagamento = dataPagamento;
 	}
 
 	public BigDecimal getValor() {
@@ -140,7 +140,5 @@ public class Lancamento {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }
