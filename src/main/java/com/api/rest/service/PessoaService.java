@@ -35,6 +35,7 @@ public class PessoaService {
 		Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
 		pessoaSalva.setAtivo(ativo);
 		pessoaRepository.save(pessoaSalva);
+		// aa
 	}
 
 	private Pessoa buscarPessoaPeloCodigo(Long codigo) {
